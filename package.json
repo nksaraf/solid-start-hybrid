@@ -1,9 +1,11 @@
 {
   "name": "ssr-and-spa",
   "scripts": {
-    "dev": "solid-start dev",
-    "build": "solid-start build",
-    "dev:web": "solid-start start"
+    "dev:web": "RENDER_MODE=ssr solid-start dev",
+    "build:web": "RENDER_MODE=ssr solid-start build",
+    "start:web": "RENDER_MODE=ssr solid-start start",
+    "dev:spa": "RENDER_MODE=spa solid-start dev",
+    "build:spa": "RENDER_MODE=spa solid-start build"
   },
   "type": "module",
   "devDependencies": {
