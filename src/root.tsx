@@ -2,7 +2,7 @@
 import { Routes, Meta, Links, Scripts } from "solid-start/root";
 import { ErrorBoundary } from "solid-start/error-boundary";
 import { children, Suspense } from "solid-js";
-import { resolveSSRNode, ssr } from "solid-js/web";
+import { isServer, resolveSSRNode, ssr } from "solid-js/web";
 
 function App() {
   return (
@@ -18,17 +18,23 @@ function App() {
   );
 }
 
-function FakeHTML(props) {
-  return `<html lang="en">
-      <head>${resolveSSRNode(
-        children(() => props.head)
-      )}</head><body>${resolveSSRNode(children(() => props.body))}</body>`;
+function Document(props) {
+  let head = children(() => props.head);
+  let body = children(() => props.body);
+  if (isServer) {
+    return `<html lang="en">
+        <head>${resolveSSRNode(head)}</head>
+        <body>${resolveSSRNode(body)}</body>
+      </html>`;
+  } else {
+    return <>{body}</>;
+  }
 }
 
 export default function Root() {
   if (process.env.RENDER_MODE === "ssr") {
     return (
-      <FakeHTML
+      <Document
         head={
           <>
             <meta charset="utf-8" />
